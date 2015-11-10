@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="myWindow" stylesheets="@elementInfo.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.stgtech.chemistryHelper.view.ElementInfoSceneController">
+   <children>
+      <HBox>
+         <children>
+            <VBox fx:id="labelBox" styleClass="labelBox">
+               <children>
+                  <Label styleClass="catagoryLabel" text="Name:" />
+                  <Label styleClass="catagoryLabel" text="Symbol:" />
+                  <Label styleClass="catagoryLabel" text="Atmoic Number:" />
+                  <Label styleClass="catagoryLabel" text="Atomic Mass:" />
+                  <Label styleClass="catagoryLabel" text="Standard State:" />
+                  <Label styleClass="catagoryLabel" text="Bonding Type:" />
+                  <Label styleClass="catagoryLabel" text="Melting Point (K):" />
+                  <Label styleClass="catagoryLabel" text="Boiling Point (K):" />
+                  <Label styleClass="catagoryLabel" text="Density:" />
+                  <Label styleClass="catagoryLabel" text="Metal/Non-Metal:" />
+                  <Label styleClass="catagoryLabel" text="Formal Oxidation Numbers:" />
+                  <Label styleClass="catagoryLabel" text="Year Discovered:" />
+                  <Label styleClass="catagoryLabel" text="Label" visible="false" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

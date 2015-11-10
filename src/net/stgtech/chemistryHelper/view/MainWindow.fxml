@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.stgtech.chemistryHelper.view.MainWindowController">
+   <children>
+      <VBox prefWidth="700.0" stylesheets="@main.css">
+         <children>
+            <TextField fx:id="dataEntryField" focusTraversable="false" onAction="#parseEntry" onMouseClicked="#clearError" prefWidth="700.0" promptText="Search by symbol, name, atomic number or enter command, e.g. &quot;join S O&quot;">
+               <tooltip>
+                  <Tooltip text="Enter up to 4 elements separated by spaces to view info; enter JOIN with 2 elements to see if they can be joined." wrapText="true" />
+               </tooltip></TextField>
+            <AnchorPane prefWidth="700.0">
+               <children>
+                  <Label id="lblError" fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" prefWidth="100.0" text="Invalid entry, unable to locate element" textAlignment="CENTER" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefWidth="700.0" VBox.vgrow="NEVER">
+               <children>
+                  <StackPane layoutX="599.0" layoutY="3.0" onMouseClicked="#helpIconClick" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Circle fill="#e5ff00" radius="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
+                        <Label alignment="CENTER" onMouseClicked="#helpIconClick" prefHeight="30.0" prefWidth="15.0" text="?" textAlignment="CENTER">
+                           <tooltip>
+                              <Tooltip anchorLocation="WINDOW_TOP_LEFT" text="Click to see command reference">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</Pane>

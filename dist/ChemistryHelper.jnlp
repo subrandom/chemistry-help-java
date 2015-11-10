@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="ChemistryHelper.jnlp">
+  <information>
+    <title>ChemistryHelper</title>
+    <vendor>stephenbradley</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="ChemistryHelper.jar" size="1035076" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="ChemistryHelper" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="net.stgtech.chemistryHelper.ChemistryHelper"  name="ChemistryHelper" />
+  <update check="always"/>
+</jnlp>
