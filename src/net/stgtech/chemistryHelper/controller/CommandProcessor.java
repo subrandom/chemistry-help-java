@@ -18,17 +18,45 @@ import net.stgtech.chemistryHelper.model.Elements;
 public class CommandProcessor {   
     public static void parseCommandEntry(String commandEntered) {
         ArrayList<String> commands = new ArrayList<>();
-        ArrayList<Element> elementsToShow;
         
         commands.addAll(Arrays.asList(commandEntered.split(" ")));
         
         if(commands.get(0).equals("/?")) {
             commands.remove(0);
-            
+            executeShowCommand(commands);
+        } else if(commands.get(0).equals("/aw")) {
+            commands.remove(0);
+            executeAtomicWeightCommand(commands);
+        } else if (commands.get(0).equals("/help")) {
+            ScreenController.showHelpWindow();
+        } else {
+            showBadCommandError(commands.get(0));
+        }
+    }
+    
+    private static void executeAtomicWeightCommand(ArrayList<String> arrayList) {
+        //make a single string from the arraylist
+        String expression = arrayList.toString().substring(1, arrayList.toString().length()-1);
+        
+        //eat spaces and commas
+        expression = expression.replaceAll("[\\s,]", "");
+       
+        System.out.println(expression);
+    }
+       
+    private static void executeShowCommand(ArrayList<String> elements) {
+            ArrayList<Element> elementsToShow = new ArrayList<>();
             //a maximum of 5 elements will be displayed
-            if (commands.size() > 5) { commands.removeAll(commands.subList(5, commands.size()));}
-            
-            elementsToShow = validateElementsEntered(commands);
+            if (elements.size() > 5) { elements.removeAll(elements.subList(5, elements.size()));}
+
+            elements.stream().forEach((e) -> {
+                Element el = Elements.isValidElement(e);
+                if(el == null) {
+                    //do nothing
+                }else {
+                    elementsToShow.add(Elements.isValidElement(e));
+            }
+        });
             
             if(elementsToShow.isEmpty()) {
                 String errorString = "No valid elements enterd. Enter elements by name or symbol,"
@@ -37,25 +65,6 @@ public class CommandProcessor {
             } else {
                 ScreenController.showElementInfoWindow(elementsToShow);
             }
-        }
-        else {
-            showBadCommandError(commands.get(0));
-        }
-    }
-       
-    private static ArrayList<Element> validateElementsEntered(ArrayList<String> elementsIn) {
-        ArrayList<Element> elementsToShow = new ArrayList<>();
-        
-                //validate elements & load into ArrayList
-        elementsIn.stream().forEach((e) -> {
-            Element el = Elements.isValidElement(e);
-            if(el == null) {
-                
-            }else {
-                elementsToShow.add(Elements.isValidElement(e));
-            }
-        });
-        return elementsToShow;
     }
     
     private static void showBadCommandError(String badCommandString) {
