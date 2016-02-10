@@ -10,7 +10,7 @@
 
 <AnchorPane fx:id="myWindow" stylesheets="@elementInfo.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.stgtech.chemistryHelper.view.ElementInfoSceneController">
    <children>
-      <HBox>
+      <HBox fx:id="hBox">
          <children>
             <VBox fx:id="labelBox" styleClass="labelBox">
                <children>

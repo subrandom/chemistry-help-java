@@ -1,29 +1,54 @@
 
 package net.stgtech.chemistryHelper.model;
 
-import javafx.scene.control.Label;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import net.stgtech.chemistryHelper.ChemistryHelper;
 
 public class Elements {
-    private final Integer atomicNumber; 
-    private final String elementSymbol;
-    private final String elementName;
-    private final String atomicMass;
-    private final String standardState;
-    private final String bondingType;
-    private final Double meltingPointK;
-    private final Double boilingPointK;
-    private final Double density;
-    private final String metalOrNot;
-    private final String yearDiscovered;
-    private final String formalOxidationNumbers;
-
-    public int getFinalOxidationValue() {
-        //we want the last value, which is everything from the final ',' to the end of string
-        String strValue = this.formalOxidationNumbers.substring((formalOxidationNumbers.lastIndexOf(",")+1), formalOxidationNumbers.length());
-        
-        return(Integer.parseInt(strValue));
+    private static final ArrayList<Element> ELEMENTS = new ArrayList<>();
+    
+    public static void loadElementDataFromFile() {
+        try {    
+            InputStream is;
+            String line;
+            BufferedReader br;
+            
+            is = ChemistryHelper.class.getResourceAsStream("data/elements.txt");
+            br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));                                                                                                                                                                                            
+            while ((line = br.readLine()) != null) {   
+                String[] cols = line.split("\t");                
+                ELEMENTS.add(new Element(cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], 
+                        cols[6], cols[7], cols[8], cols[9], cols[10], cols[11]));           
+            }   
+        } catch (IOException ex) {
+            String strMessage = "Unable to locate the element data file. "
+                + "please contact support.";
+            
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Cannot locate data file");
+            alert.setHeaderText(null);
+            alert.setContentText(strMessage);
+            alert.showAndWait();
+            
+            Platform.exit();
+        }
     }
-
+        
+    public static Element isValidElement(String searchString) {        
+        for (Element e : ELEMENTS) {
+            if(e.matches(searchString))
+                return e;
+        }
+        return null;
+    }
+    
     public enum ELEMENTS {
         ATOMIC_NUMBER,
         ELEMENT_SYMBOL,
@@ -38,106 +63,4 @@ public class Elements {
         YEAR_DISCOVERED,
         FORMAL_OXIDATION_NUM;
     };
-
-    public Elements (String atomicNumber, String elementSymbol, String elementName, String atomicMass, 
-            String standardState, String bondingType, String meltingPointK, String boilingPointK,
-            String density, String metalOrNot, String yearDiscovered, String formalOxidationNumbers) {
-        this.atomicNumber = Integer.parseInt(atomicNumber);
-        this.elementSymbol = elementSymbol;
-        this.elementName = elementName;
-        this.atomicMass = atomicMass;
-        this.standardState = standardState;
-        this.bondingType = bondingType;
-        this.meltingPointK = Double.parseDouble(meltingPointK);
-        this.boilingPointK = Double.parseDouble(boilingPointK);
-        this.density = Double.parseDouble(density);
-        this.metalOrNot = metalOrNot;
-        this.yearDiscovered = yearDiscovered;
-        this.formalOxidationNumbers = formalOxidationNumbers;
-    }
-    
-    public String getElementSymbol() {
-        return this.elementSymbol;  
-    }
-    
-    public String getElementName() {
-        return this.elementName;
-    }
-    
-    public boolean searchFor(String searchTerm) {
-        boolean match = false;
-        searchTerm = searchTerm.toLowerCase();
-        
-        if(this.elementName.toLowerCase().equals(searchTerm) || this.elementSymbol.toLowerCase().equals(searchTerm) || this.atomicNumber.toString().equals(searchTerm)) {
-            match = true;
-        }
-        return match;
-    }
-    
-    public Label getLabelForProperty (ELEMENTS property) {
-        Label returnLabel = new Label();
-        switch(property) {
-            case ATOMIC_NUMBER:
-                returnLabel.setText(Integer.toString(this.atomicNumber));
-                break;
-            case ELEMENT_SYMBOL:
-                returnLabel.setText(this.elementSymbol);
-                break;
-            case ELEMENT_NAME:
-                returnLabel.setText(this.elementName);
-                break;
-            case ATOMIC_MASS:
-                returnLabel.setText(this.atomicMass);
-                break;
-            case STANDARD_STATE:
-                returnLabel.setText(this.standardState);
-                break;
-            case BONDING_TYPE:
-                returnLabel.setText(this.bondingType);
-                break;
-            case MELTING_POINT_K:
-                returnLabel.setText(Double.toString(this.meltingPointK));
-                break;
-            case BOILING_POINT_K:
-                returnLabel.setText(Double.toString(this.boilingPointK));
-                break;
-            case DENSITY:
-                returnLabel.setText(Double.toString(this.density));
-                break;
-            case METAL_NONMETAL:
-                returnLabel.setText(this.metalOrNot);
-                break;
-            case YEAR_DISCOVERED:
-                returnLabel.setText(this.yearDiscovered);
-                break;
-            case FORMAL_OXIDATION_NUM:
-                returnLabel.setText(this.formalOxidationNumbers);
-                break;
-            default:
-                returnLabel = null;
-                break;
-        }
-        
-        return returnLabel;
-    }
-    
-    public int[] getOxidationLevels() {
-        int[] oxidationLevels;
-        
-        String [] strOxidationLevels = this.formalOxidationNumbers.split(",");
-        
-        int numberOfStates = strOxidationLevels.length;
-        
-        oxidationLevels = new int[numberOfStates];
-        
-        for(int i = 0; i < numberOfStates; i++) {
-            oxidationLevels[i] = Integer.parseInt(strOxidationLevels[i]);
-        }
-        return oxidationLevels;
-    }
-    
-    public String getOxidationLevelsAsString() {
-        return this.formalOxidationNumbers;
-    }
-
 }

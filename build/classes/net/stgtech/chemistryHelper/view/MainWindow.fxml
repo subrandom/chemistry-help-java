@@ -13,7 +13,7 @@
    <children>
       <VBox prefWidth="700.0" stylesheets="@main.css">
          <children>
-            <TextField fx:id="dataEntryField" focusTraversable="false" onAction="#parseEntry" onMouseClicked="#clearError" prefWidth="700.0" promptText="Search by symbol, name, atomic number or enter command, e.g. &quot;join S O&quot;">
+            <TextField fx:id="dataEntryField" focusTraversable="false" onAction="#parseEntry" onMouseClicked="#clearError" prefWidth="700.0" promptText="/help for commands, or click the ? button">
                <tooltip>
                   <Tooltip text="Enter up to 4 elements separated by spaces to view info; enter JOIN with 2 elements to see if they can be joined." wrapText="true" />
                </tooltip></TextField>

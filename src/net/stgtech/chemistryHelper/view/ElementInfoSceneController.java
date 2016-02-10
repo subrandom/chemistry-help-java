@@ -9,13 +9,16 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import net.stgtech.chemistryHelper.model.Elements;
+import net.stgtech.chemistryHelper.model.Element;
 import net.stgtech.chemistryHelper.model.Elements.ELEMENTS;
 
 public class ElementInfoSceneController implements Initializable {
     @FXML
     private AnchorPane myWindow;
     private static final double SIZEOFVBOX = 200;
+    
+    @FXML
+    private HBox hBox;
     
     @FXML
     private VBox labelBox;
@@ -25,18 +28,14 @@ public class ElementInfoSceneController implements Initializable {
 
     }    
     
-    public void showElementInfo(ArrayList<Elements> elements, AnchorPane myWindow) {
+    public void showElementInfo(ArrayList<Element> elementsToShow) {
+        
         //increase the width of the main window 
         myWindow.setPrefWidth(myWindow.getWidth() + SIZEOFVBOX);
         myWindow.setMaxWidth(myWindow.getPrefWidth());
-        this.myWindow = myWindow;
-        
-        //ScrollPane myScrollPane = (ScrollPane) myWindow.getChildrenUnmodifiable().get(0);
-        //increase size of the scrollpane to match the window
-        //myScrollPane.setPrefViewportWidth(myScrollPane.getPrefViewportWidth() + SIZEOFVBOX);
-        //myScrollPane.setMinViewportWidth(myScrollPane.getPrefViewportWidth());
-        elements.stream().forEach((element) -> {
-            HBox myHBox = (HBox) myWindow.getChildrenUnmodifiable().get(0);
+
+        elementsToShow.stream().forEach((element) -> {
+            hBox = (HBox) myWindow.getChildrenUnmodifiable().get(0);
 
             VBox elementBox = new VBox();
             elementBox.setPrefWidth(SIZEOFVBOX);
@@ -56,10 +55,7 @@ public class ElementInfoSceneController implements Initializable {
                     element.getLabelForProperty(ELEMENTS.FORMAL_OXIDATION_NUM),
                     element.getLabelForProperty(ELEMENTS.YEAR_DISCOVERED));
             
-            myHBox.getChildren().add(elementBox);
+            hBox.getChildren().add(elementBox);
         });
-        
-        labelBox.requestFocus();
     }
-    
 }
