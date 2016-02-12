@@ -12,7 +12,7 @@ import javafx.scene.control.Alert;
 import net.stgtech.chemistryHelper.ChemistryHelper;
 
 public class Elements {
-    private static final ArrayList<Element> ELEMENTS = new ArrayList<>();
+    private static final ArrayList<Element> ALL_ELEMENTS = new ArrayList<>();
     
     public static void loadElementDataFromFile() {
         try {    
@@ -24,7 +24,7 @@ public class Elements {
             br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));                                                                                                                                                                                            
             while ((line = br.readLine()) != null) {   
                 String[] cols = line.split("\t");                
-                ELEMENTS.add(new Element(cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], 
+                ALL_ELEMENTS.add(new Element(cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], 
                         cols[6], cols[7], cols[8], cols[9], cols[10], cols[11]));           
             }   
         } catch (IOException ex) {
@@ -41,12 +41,15 @@ public class Elements {
         }
     }
         
-    public static Element isValidElement(String searchString) {        
-        for (Element e : ELEMENTS) {
-            if(e.matches(searchString))
-                return e;
+    public static boolean isValidElement(String searchString) {  
+        if(ALL_ELEMENTS.contains(searchString)) {
+            return true;
         }
-        return null;
+        return false;
+    }
+    
+    public static Element getElementBySymbol(String symbol) {
+        return ALL_ELEMENTS.get(ALL_ELEMENTS.indexOf(symbol));
     }
     
     public enum ELEMENTS {

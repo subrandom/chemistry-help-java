@@ -24,9 +24,9 @@ public class CommandProcessor {
         if(commands.get(0).equals("/?")) {
             commands.remove(0);
             executeShowCommand(commands);
-        } else if(commands.get(0).equals("/aw")) {
+        } else if(commands.get(0).equals("/am")) {
             commands.remove(0);
-            executeAtomicWeightCommand(commands);
+            //executeAtomicWeightCommand(commands);
         } else if (commands.get(0).equals("/help")) {
             ScreenController.showHelpWindow();
         } else {
@@ -34,15 +34,56 @@ public class CommandProcessor {
         }
     }
     
-    private static void executeAtomicWeightCommand(ArrayList<String> arrayList) {
-        //make a single string from the arraylist
-        String expression = arrayList.toString().substring(1, arrayList.toString().length()-1);
-        
-        //eat spaces and commas
-        expression = expression.replaceAll("[\\s,]", "");
-       
-        System.out.println(expression);
+    /*    private static void executeAtomicWeightCommand(ArrayList<String> arrayList) {
+    //make a single string from the arraylist
+    String expression = arrayList.toString().substring(1, arrayList.toString().length()-1);
+    
+    //eat spaces and commas
+    expression = expression.replaceAll("[\\s,]", "");
+    
+    //create a valid math equation while also checking the validity of the element symbols
+    StringBuilder equation = new StringBuilder();
+    char previousChar, currentChar, nextChar;
+    boolean errorFlag = false;
+    
+    for(int i = 0; i < expression.length(); i++) {
+    currentChar = expression.charAt(i);
+    nextChar = expression.charAt(i+1);
+    
+    if (isUpperCaseLetter(currentChar)) {
+    String value;
+    if(isLowerCaseLetter(nextChar)) {
+    value = Elements.getElementAtomicMass(String.valueOf(currentChar) + String.valueOf(nextChar));
+    if("".equals(value)) {
+    showGeneralError("The element starting at character " + i +
+    " is invalid.Unable to process expression.");
+    errorFlag = true;
+    break;
     }
+    equation.append(Elements.getElementAtomicMass(String.valueOf(currentChar) + String.valueOf(nextChar)));
+    }
+    if(isUpperCaseLetter(nextChar)) {
+    equation.append(equation);
+    }
+    }
+    }
+    }*/
+    
+    private static boolean isUpperCaseLetter(char c) {
+            
+        return true;
+    }
+    
+    private static boolean isLowerCaseLetter(char c) {
+        
+        return true;
+    }
+    
+    private static boolean isNumber(char c) {
+        return true;
+    }
+    
+    
        
     private static void executeShowCommand(ArrayList<String> elements) {
             ArrayList<Element> elementsToShow = new ArrayList<>();
@@ -50,12 +91,9 @@ public class CommandProcessor {
             if (elements.size() > 5) { elements.removeAll(elements.subList(5, elements.size()));}
 
             elements.stream().forEach((e) -> {
-                Element el = Elements.isValidElement(e);
-                if(el == null) {
-                    //do nothing
-                }else {
-                    elementsToShow.add(Elements.isValidElement(e));
-            }
+                if(Elements.isValidElement(e)) {
+                    elementsToShow.add(Elements.getElementBySymbol(e));
+                }
         });
             
             if(elementsToShow.isEmpty()) {
