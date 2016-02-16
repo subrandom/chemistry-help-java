@@ -21,12 +21,12 @@ public class CommandProcessor {
         
         commands.addAll(Arrays.asList(commandEntered.split(" ")));
         
-        if(commands.get(0).equals("/?")) {
+        if(commands.get(0).equals("?")) {
             commands.remove(0);
             executeShowCommand(commands);
-        } else if(commands.get(0).equals("/am")) {
+        } else if(commands.get(0).equals("am")) {
             commands.remove(0);
-            //executeAtomicWeightCommand(commands);
+            executeAtomicWeightCommand(commands);
         } else if (commands.get(0).equals("/help")) {
             ScreenController.showHelpWindow();
         } else {
@@ -34,40 +34,24 @@ public class CommandProcessor {
         }
     }
     
-    /*    private static void executeAtomicWeightCommand(ArrayList<String> arrayList) {
-    //make a single string from the arraylist
-    String expression = arrayList.toString().substring(1, arrayList.toString().length()-1);
-    
-    //eat spaces and commas
-    expression = expression.replaceAll("[\\s,]", "");
-    
-    //create a valid math equation while also checking the validity of the element symbols
-    StringBuilder equation = new StringBuilder();
-    char previousChar, currentChar, nextChar;
-    boolean errorFlag = false;
-    
-    for(int i = 0; i < expression.length(); i++) {
-    currentChar = expression.charAt(i);
-    nextChar = expression.charAt(i+1);
-    
-    if (isUpperCaseLetter(currentChar)) {
-    String value;
-    if(isLowerCaseLetter(nextChar)) {
-    value = Elements.getElementAtomicMass(String.valueOf(currentChar) + String.valueOf(nextChar));
-    if("".equals(value)) {
-    showGeneralError("The element starting at character " + i +
-    " is invalid.Unable to process expression.");
-    errorFlag = true;
-    break;
+    private static void executeAtomicWeightCommand(ArrayList<String> arrayList) {
+        //make a single string from the arraylist
+        String expression = arrayList.toString().substring(1, arrayList.toString().length()-1);
+
+        //eat spaces and commas
+        expression = expression.replaceAll("[\\s,]", "")    ;
+
+        //create a valid math equation while also checking the validity of the element symbols
+        StringBuilder equation = new StringBuilder();
+        char previousChar, currentChar, nextChar;
+        boolean errorFlag = false;
+
+        for(int i = 0; i < expression.length(); i++) {
+            currentChar = expression.charAt(i);
+            nextChar = expression.charAt(i+1);
+
+        }
     }
-    equation.append(Elements.getElementAtomicMass(String.valueOf(currentChar) + String.valueOf(nextChar)));
-    }
-    if(isUpperCaseLetter(nextChar)) {
-    equation.append(equation);
-    }
-    }
-    }
-    }*/
     
     private static boolean isUpperCaseLetter(char c) {
             

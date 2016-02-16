@@ -15,7 +15,7 @@ import net.stgtech.chemistryHelper.model.Elements.ELEMENTS;
 public class ElementInfoSceneController implements Initializable {
     @FXML
     private AnchorPane myWindow;
-    private static final double SIZEOFVBOX = 200;
+    private static final double SIZEOFVBOX = 230;
     
     @FXML
     private HBox hBox;
@@ -29,10 +29,6 @@ public class ElementInfoSceneController implements Initializable {
     }    
     
     public void showElementInfo(ArrayList<Element> elementsToShow) {
-        
-        //increase the width of the main window 
-        myWindow.setPrefWidth(myWindow.getWidth() + SIZEOFVBOX);
-        myWindow.setMaxWidth(myWindow.getPrefWidth());
 
         elementsToShow.stream().forEach((element) -> {
             hBox = (HBox) myWindow.getChildrenUnmodifiable().get(0);

@@ -15,6 +15,7 @@ public class ChemistryHelper extends Application {
     public void start(Stage primaryStage) {
         setUserAgentStylesheet(STYLESHEET_MODENA);
         Elements.loadElementDataFromFile();
+        Elements.initializeElementLists();
         ScreenController.setStage(primaryStage);
         ScreenController.initializeApplicationWindows();
         ScreenController.showMainWindow();

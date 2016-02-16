@@ -12,7 +12,7 @@ import net.stgtech.chemistryHelper.model.Elements.ELEMENTS;
  *
  * @author Stephen.Bradley
  */
-public class Element implements Comparable<Element> {
+public class Element {
     private final Integer atomicNumber; 
     private final String elementSymbol;
     private final String elementName;
@@ -42,26 +42,13 @@ public class Element implements Comparable<Element> {
         this.yearDiscovered = yearDiscovered;
         this.formalOxidationNumbers = formalOxidationNumbers;
     }
-    
-     String getElementAtomicMass() {
-        return this.atomicMass;
-    }
+
     public String getElementSymbol() {
         return this.elementSymbol;  
     }
     
     public String getElementName() {
         return this.elementName;
-    }
-    
-    public boolean matches(String searchTerm) {
-        boolean match = false;
-        searchTerm = searchTerm.toLowerCase();
-        
-        if(this.elementName.toLowerCase().equals(searchTerm) || this.elementSymbol.toLowerCase().equals(searchTerm)) {
-            match = true;
-        }
-        return match;
     }
     
     public Label getLabelForProperty (ELEMENTS property) {
@@ -111,8 +98,4 @@ public class Element implements Comparable<Element> {
         return returnLabel;
     }
 
-    @Override
-    public int compareTo(Element o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

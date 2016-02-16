@@ -12,7 +12,10 @@ import javafx.scene.control.Alert;
 import net.stgtech.chemistryHelper.ChemistryHelper;
 
 public class Elements {
+    
     private static final ArrayList<Element> ALL_ELEMENTS = new ArrayList<>();
+    private static final ArrayList<String> ALL_ELEMENT_SYMBOLS = new ArrayList<>();
+    private static final ArrayList<String> ALL_ELEMENT_NAMES = new ArrayList<>();
     
     public static void loadElementDataFromFile() {
         try {    
@@ -40,16 +43,22 @@ public class Elements {
             Platform.exit();
         }
     }
-        
+    
+    public static void initializeElementLists() {
+        ALL_ELEMENTS.stream().map((e) -> {
+            ALL_ELEMENT_NAMES.add(e.getElementName());
+            return e;
+        }).forEach((e) -> {
+            ALL_ELEMENT_SYMBOLS.add(e.getElementSymbol());
+        });
+    }
+
     public static boolean isValidElement(String searchString) {  
-        if(ALL_ELEMENTS.contains(searchString)) {
-            return true;
-        }
-        return false;
+        return ALL_ELEMENT_NAMES.contains(searchString) || ALL_ELEMENT_SYMBOLS.contains(searchString);
     }
     
     public static Element getElementBySymbol(String symbol) {
-        return ALL_ELEMENTS.get(ALL_ELEMENTS.indexOf(symbol));
+        return ALL_ELEMENTS.get(ALL_ELEMENT_SYMBOLS.indexOf(symbol));
     }
     
     public enum ELEMENTS {

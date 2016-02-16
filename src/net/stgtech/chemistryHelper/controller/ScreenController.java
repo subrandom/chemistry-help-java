@@ -139,6 +139,11 @@ public class ScreenController {
     }
     
     public static void showElementInfoWindow(ArrayList<Element> elementsToShow) {
+        
+        if (elementInfoStage.isShowing()) {
+            elementInfoStage.close();
+        }
+        
         FXMLLoader elementWindowLoader = new FXMLLoader();
         elementWindowLoader.setLocation(ChemistryHelper.class.getResource("view/ElementInfoScene.fxml"));
         
@@ -159,7 +164,6 @@ public class ScreenController {
             
             ewController.showElementInfo(elementsToShow);
             elementInfoStage.show();           
-            elementsToShow.clear();
             
             }
         catch (IOException iox) {
