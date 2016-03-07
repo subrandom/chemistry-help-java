@@ -46,7 +46,7 @@ public class Elements {
     
     public static void initializeElementLists() {
         ALL_ELEMENTS.stream().map((e) -> {
-            ALL_ELEMENT_NAMES.add(e.getElementName());
+            ALL_ELEMENT_NAMES.add(e.getElementName().toLowerCase());
             return e;
         }).forEach((e) -> {
             ALL_ELEMENT_SYMBOLS.add(e.getElementSymbol());
@@ -54,11 +54,15 @@ public class Elements {
     }
 
     public static boolean isValidElement(String searchString) {  
-        return ALL_ELEMENT_NAMES.contains(searchString) || ALL_ELEMENT_SYMBOLS.contains(searchString);
+        return ALL_ELEMENT_NAMES.contains(searchString.toLowerCase()) || ALL_ELEMENT_SYMBOLS.contains(searchString);
     }
     
     public static Element getElementBySymbol(String symbol) {
         return ALL_ELEMENTS.get(ALL_ELEMENT_SYMBOLS.indexOf(symbol));
+    }
+    
+    public static String getAtomicMassString(String symbol) {
+        return Double.toString(ALL_ELEMENTS.get(ALL_ELEMENT_SYMBOLS.indexOf(symbol)).atomicMass());
     }
     
     public enum ELEMENTS {

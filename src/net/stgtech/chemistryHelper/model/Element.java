@@ -16,7 +16,7 @@ public class Element {
     private final Integer atomicNumber; 
     private final String elementSymbol;
     private final String elementName;
-    private final String atomicMass;
+    private final Double atomicMass;
     private final String standardState;
     private final String bondingType;
     private final Double meltingPointK;
@@ -32,7 +32,7 @@ public class Element {
         this.atomicNumber = Integer.parseInt(atomicNumber);
         this.elementSymbol = elementSymbol;
         this.elementName = elementName;
-        this.atomicMass = atomicMass;
+        this.atomicMass = Double.parseDouble(atomicMass);
         this.standardState = standardState;
         this.bondingType = bondingType;
         this.meltingPointK = Double.parseDouble(meltingPointK);
@@ -51,6 +51,10 @@ public class Element {
         return this.elementName;
     }
     
+    public Double atomicMass() {
+        return this.atomicMass;
+    }
+    
     public Label getLabelForProperty (ELEMENTS property) {
         Label returnLabel = new Label();
         switch(property) {
@@ -64,7 +68,7 @@ public class Element {
                 returnLabel.setText(this.elementName);
                 break;
             case ATOMIC_MASS:
-                returnLabel.setText(this.atomicMass);
+                returnLabel.setText(Double.toString(this.atomicMass));
                 break;
             case STANDARD_STATE:
                 returnLabel.setText(this.standardState);

@@ -10,6 +10,10 @@ package net.stgtech.chemistryHelper.controller;
  * @author Stephen.Bradley
  */
 public class Utilities {
-    
+
+    public static String parseEquation(String equationEntered) {
+        
+        return null;
+    }
 
 }
