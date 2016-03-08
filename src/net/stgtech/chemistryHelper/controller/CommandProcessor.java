@@ -2,11 +2,9 @@ package net.stgtech.chemistryHelper.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import net.stgtech.chemistryHelper.model.Element;
 import net.stgtech.chemistryHelper.model.Elements;
-import org.nfunk.jep.JEP;
 
 public class CommandProcessor {   
     public static void parseCommandEntry(String commandEntered) {
@@ -55,187 +53,29 @@ public class CommandProcessor {
 
         //eat spaces and commas
         expression = expression.replaceAll("[\\s,]", "");
-        
-        if(hasUnmatchedParentheses(expression)) {
-            showGeneralError("Bad formula: open/close parenthesis mis-match");
-            return;
-        }
        
-        StringBuilder equation = new StringBuilder();
-        char previousChar;
-        char currentChar;
-        boolean errorInFormula = false;
-        
-        for(int i = 0; i < expression.length(); i++) {
-            currentChar = expression.charAt(i);
-            previousChar = (i == 0 ? '#' : expression.charAt(i -1));
-            
-            if(previousChar == '#') {
-                if(isOperator(currentChar) || isCloseParenthesis(currentChar) || isLowerCaseLetter(currentChar)) {
-                    showGeneralError("Bad formula: illegal first character. Must be number or symbol");
-                    errorInFormula = true;
-                    break;
-                }
-            }
-            
-            if(isLowerCaseLetter(currentChar)) {
-                if(isUpperCaseLetter(previousChar)) {
-                    equation.append(currentChar);
-                    continue;
-                } else {
-                    showGeneralError("Bad formula: lower case letter not preceded by uppercase letter");
-                    errorInFormula = true;
-                    break;
-                }
-            }
-            
-            if(isNumber(currentChar)) {
-                if(previousChar == '#') {
-                    equation.append(currentChar);
-                    continue;
-                }
-                
-                if(isNumber(previousChar)) {
-                    equation.append(currentChar);
-                    continue;
-                }
-                
-                if(isCloseParenthesis(previousChar)) {
-                    equation.append(" * ").append(currentChar);
-                    continue;
-                }
-                
-                if (isOpenParenthesis(previousChar)) {
-                    equation.append(currentChar);
-                    continue;
-                }
-                
-                if(isUpperCaseLetter(previousChar) || isLowerCaseLetter(previousChar)) {
-                    equation.append(" * ").append(currentChar);
-                    continue;
-                }
-                
-                if(isOperator(previousChar)) {
-                    equation.append(" ").append(currentChar);
-                    continue;
-                }
-                
-                System.err.println("Something bad happened. Character being processed = " + currentChar);
-                Platform.exit();
-            }
-            
-            if(isOperator(currentChar)) {
-                if(isOperator(previousChar)) {
-                    showGeneralError("Bad formula: two operators in a row, like '+ +'");
-                    errorInFormula = true;
-                    break;
-                }
-                
-                if(isOpenParenthesis(previousChar)) {
-                    showGeneralError("Bad formula: operator after open parenthesis, like (+, is illogical");
-                    errorInFormula = true;
-                    break;
-                }
-                
-                equation.append(" ").append(currentChar);
-                continue;
-                
-            }
-            
-            if(isUpperCaseLetter(currentChar)) {
-                char nextChar;
-                String elementValue;
-                String elementSymbol = "";
-                
-                if(i != expression.length() - 1) {
-                    nextChar  = expression.charAt(i + 1);
-                    if(isLowerCaseLetter(nextChar)) {
-                        elementSymbol = String.valueOf(currentChar) + String.valueOf(nextChar);
-                        i++; //move the index past the lower-case letter
-                    } else {
-                        elementSymbol = String.valueOf(currentChar);
-                    }     
-                } else {
-                    elementSymbol = String.valueOf(currentChar);
-                }
-
-                if(Elements.isValidElement(elementSymbol)) {
-                    elementValue = Elements.getAtomicMassString(elementSymbol);
-                } else {
-                    showGeneralError("Bad formula: invalid element symbol in equation");
-                    errorInFormula = true;
-                    break;
-                }
-                
-                if(previousChar == '#') {
-                    equation.append(elementValue);
-                    continue;
-                }
-                
-                if(isOperator(previousChar)) {
-                    equation.append(" ").append(elementValue);
-                    continue;
-                }
-
-                if(isCloseParenthesis(previousChar)) {
-                    equation.append(" * ").append(elementValue);
-                    continue;
-                }
-
-                if(isOpenParenthesis(previousChar)) {
-                    equation.append(" ").append(elementValue);
-                    continue;
-                }
-
-                if(isLowerCaseLetter(previousChar) || isUpperCaseLetter(previousChar)) {
-                    equation.append(" + ").append(elementValue);
-                    continue;
-                }
-
-                if(isNumber(previousChar)) {
-                    equation.append(" + ").append(elementValue);
-                    continue;
-                }
-
-                System.err.println("Something bad happened. Character being processed = " + currentChar);
-                Platform.exit();
-            }
-            
-            if(isOpenParenthesis(currentChar)) {
-                if(previousChar == '#') {
-                    equation.append("(");
-                    continue;
-                }
-                
-                if(isOperator(previousChar)) {
-                    equation.append(" (");
-                    continue;
-                } 
-                equation.append(" * ").append(currentChar);
-                continue;
-            }  
-            if(isCloseParenthesis(currentChar)) {
-                if(isOperator(previousChar)) {
-                    showGeneralError("Bad formula: close parenthesis after an operator, like +), is illogicial");
-                    errorInFormula = true;
-                    break;
-                }
-                equation.append(" )");
-                continue;
-            }
-        }       
-        if(errorInFormula) {
-            return;
-        }
-
-        //first method, a custom parser
-        System.out.println(new Parser().parse(equation.toString()));
-        
-        //second method, a pre-built library
-        JEP myParser = new JEP();
-        myParser.parseExpression(equation.toString());
-        System.out.println(myParser.getValue());
-        
+        //normalize the expression
+        System.out.println(expression);
+        expression = expression.replaceAll("([A-Z][a-z])([1-9])", "$1 * $2"); //space out double-letter elements
+        System.out.println(expression);
+        expression = expression.replaceAll("([A-Z]{1})([1-9])", "$1 * $2"); //space out numbers that follow single-letter elements
+        System.out.println(expression);
+        expression = expression.replaceAll("([A-Z])([A-Z])", "$1 + $2"); //space out any two single-letter elements next to each other
+        System.out.println(expression);
+        expression = expression.replaceAll("([0-9])([A-Z])", "$1 * $2"); //add multiply between any numbers followed by elements
+        System.out.println(expression);
+        expression = expression.replaceAll("([0-9]+)([\\+\\-\\*])", "$1 $2"); //space out any numbers followed by operataors
+        System.out.println(expression);
+        expression = expression.replaceAll("([\\+\\-\\*\\^\\(\\)]?)([0-9]+)([\\+\\-\\*\\^\\(\\)]?)", "$1 $2 $3"); //space out any operator-Number-operator groups
+        System.out.println(expression);
+        expression = expression.replaceAll("([\\+\\-\\*\\^\\(\\)])([A-Z])", "$1 $2"); //space out any operator-element groups
+        System.out.println(expression);
+        expression = expression.replaceAll("([A-Z])([\\+\\-\\*\\^\\(\\)])", "$1 $2"); //space out any element-operator groups
+        System.out.println(expression);
+        expression = expression.replaceAll("(\\))(\\S)", "$1 $2"); //space out any closed parenthesis with anything after it
+        System.out.println(expression);
+        expression = expression.replaceAll("(\\s{2,})", " "); //remove any double spaces
+        System.out.println(expression);
     }
     
     
