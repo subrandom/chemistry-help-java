@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package net.stgtech.chemistryHelper.controller;
 
 import java.util.ArrayList;
@@ -11,11 +6,8 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import net.stgtech.chemistryHelper.model.Element;
 import net.stgtech.chemistryHelper.model.Elements;
+import org.nfunk.jep.JEP;
 
-/**
- *
- * @author Stephen.Bradley
- */
 public class CommandProcessor {   
     public static void parseCommandEntry(String commandEntered) {
         ArrayList<String> commands = new ArrayList<>();
@@ -71,8 +63,8 @@ public class CommandProcessor {
        
         StringBuilder equation = new StringBuilder();
         char previousChar;
-        char currentChar = '*';
-        int errorCode = 0;
+        char currentChar;
+        boolean errorInFormula = false;
         
         for(int i = 0; i < expression.length(); i++) {
             currentChar = expression.charAt(i);
@@ -80,7 +72,8 @@ public class CommandProcessor {
             
             if(previousChar == '#') {
                 if(isOperator(currentChar) || isCloseParenthesis(currentChar) || isLowerCaseLetter(currentChar)) {
-                    errorCode = 120;
+                    showGeneralError("Bad formula: illegal first character. Must be number or symbol");
+                    errorInFormula = true;
                     break;
                 }
             }
@@ -90,7 +83,8 @@ public class CommandProcessor {
                     equation.append(currentChar);
                     continue;
                 } else {
-                    errorCode = 100;
+                    showGeneralError("Bad formula: lower case letter not preceded by uppercase letter");
+                    errorInFormula = true;
                     break;
                 }
             }
@@ -132,12 +126,14 @@ public class CommandProcessor {
             
             if(isOperator(currentChar)) {
                 if(isOperator(previousChar)) {
-                    errorCode = 110;
+                    showGeneralError("Bad formula: two operators in a row, like '+ +'");
+                    errorInFormula = true;
                     break;
                 }
                 
                 if(isOpenParenthesis(previousChar)) {
-                    errorCode = 140;
+                    showGeneralError("Bad formula: operator after open parenthesis, like (+, is illogical");
+                    errorInFormula = true;
                     break;
                 }
                 
@@ -166,7 +162,8 @@ public class CommandProcessor {
                 if(Elements.isValidElement(elementSymbol)) {
                     elementValue = Elements.getAtomicMassString(elementSymbol);
                 } else {
-                    errorCode = 150;
+                    showGeneralError("Bad formula: invalid element symbol in equation");
+                    errorInFormula = true;
                     break;
                 }
                 
@@ -213,49 +210,35 @@ public class CommandProcessor {
                 if(isOperator(previousChar)) {
                     equation.append(" (");
                     continue;
-                }
-                
+                } 
                 equation.append(" * ").append(currentChar);
                 continue;
-            }
-            
+            }  
             if(isCloseParenthesis(currentChar)) {
                 if(isOperator(previousChar)) {
-                    errorCode = 130;
+                    showGeneralError("Bad formula: close parenthesis after an operator, like +), is illogicial");
+                    errorInFormula = true;
                     break;
                 }
-                
                 equation.append(" )");
                 continue;
             }
+        }       
+        if(errorInFormula) {
+            return;
         }
+
+        //first method, a custom parser
+        System.out.println(new Parser().parse(equation.toString()));
         
-        if(errorCode != 0) {
-            switch(errorCode) {
-                case 100:
-                    showGeneralError("Bad formula: lower case letter not preceded by uppercase letter");
-                    break;
-                case 110:
-                    showGeneralError("Bad formula: two operators in a row, like '+ +'");
-                    break;
-                case 120:
-                    showGeneralError("Bad formula: illegal first character. Must be number or symbol");
-                    break;
-                case 130:
-                    showGeneralError("Bad formula: close parenthesis after an operator, like +), is illogicial");
-                    break;
-                case 140:
-                    showGeneralError("Bad formula: operator after open parenthesis, like (+, is illogical");
-                    break;
-                case 150:
-                    showGeneralError("Bad formula: invalid element symbol in equation");
-                    break;
-            }
-        }
+        //second method, a pre-built library
+        JEP myParser = new JEP();
+        myParser.parseExpression(equation.toString());
+        System.out.println(myParser.getValue());
         
-        System.out.println(equation.toString());
-   
     }
+    
+    
     
     private static boolean isUpperCaseLetter(char c) {
         return Character.isAlphabetic(c) && Character.isUpperCase(c);
