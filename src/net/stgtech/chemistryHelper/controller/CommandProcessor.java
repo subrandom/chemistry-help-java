@@ -35,14 +35,7 @@ public class CommandProcessor {
         }
     }
     
-    private static void executeAtomicWeightCommand(ArrayList<String> arrayList) {      
-        //make a single string from the arraylist
-        String expression = arrayList.toString().substring(1, arrayList.toString().length()-1);
-
-        //eat spaces and commas
-        expression = expression.replaceAll("[\\s,]", "");
-        
-        //error check: matching parenthesis?
+    private static boolean hasUnmatchedParentheses(String expression) {
         int countOpenParenthesis = 0;
         int countCloseParenthesis = 0;
         
@@ -58,23 +51,35 @@ public class CommandProcessor {
         }
         
         if (countOpenParenthesis != countCloseParenthesis) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    private static void executeAtomicWeightCommand(ArrayList<String> arrayList) {      
+        //make a single string from the arraylist
+        String expression = arrayList.toString().substring(1, arrayList.toString().length()-1);
+
+        //eat spaces and commas
+        expression = expression.replaceAll("[\\s,]", "");
+        
+        if(hasUnmatchedParentheses(expression)) {
             showGeneralError("Bad formula: open/close parenthesis mis-match");
             return;
         }
-        
-        
+       
         StringBuilder equation = new StringBuilder();
-        char previousChar = '#';
+        char previousChar;
         char currentChar = '*';
         int errorCode = 0;
         
         for(int i = 0; i < expression.length(); i++) {
             currentChar = expression.charAt(i);
-            System.out.println("Current position: " + i + "Char: " + currentChar);
+            previousChar = (i == 0 ? '#' : expression.charAt(i -1));
             
             if(previousChar == '#') {
                 if(isOperator(currentChar) || isCloseParenthesis(currentChar) || isLowerCaseLetter(currentChar)) {
-                    System.out.println("Current char = " + currentChar);
                     errorCode = 120;
                     break;
                 }
@@ -151,18 +156,19 @@ public class CommandProcessor {
                     if(isLowerCaseLetter(nextChar)) {
                         elementSymbol = String.valueOf(currentChar) + String.valueOf(nextChar);
                         i++; //move the index past the lower-case letter
+                    } else {
+                        elementSymbol = String.valueOf(currentChar);
                     }     
                 } else {
                     elementSymbol = String.valueOf(currentChar);
                 }
 
-                    System.out.println("Attempting to get value for " + elementSymbol);
-                    if(Elements.isValidElement(elementSymbol)) {
-                        elementValue = Elements.getAtomicMassString(elementSymbol);
-                    } else {
-                        errorCode = 150;
-                        break;
-                    }
+                if(Elements.isValidElement(elementSymbol)) {
+                    elementValue = Elements.getAtomicMassString(elementSymbol);
+                } else {
+                    errorCode = 150;
+                    break;
+                }
                 
                 if(previousChar == '#') {
                     equation.append(elementValue);
@@ -245,7 +251,6 @@ public class CommandProcessor {
                     showGeneralError("Bad formula: invalid element symbol in equation");
                     break;
             }
-            previousChar = currentChar;
         }
         
         System.out.println(equation.toString());
