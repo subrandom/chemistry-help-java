@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minWidth="450.0" stylesheets="@elementInfo.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.stgtech.chemistryHelper.view.AtomicMassSceneController">
+   <children>
+      <HBox prefHeight="100.0" prefWidth="277.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox styleClass="labelBox" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" styleClass="catagoryLabel" text="Equation Entered:" />
+                  <Label alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" styleClass="catagoryLabel" text="Atomic Mass:" />
+               </children>
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER_LEFT" fx:id="equationEnteredLabel" maxWidth="1.7976931348623157E308" text="Label" />
+                  <Label alignment="CENTER_LEFT" fx:id="atomicMassLabel" maxWidth="1.7976931348623157E308" text="Label" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

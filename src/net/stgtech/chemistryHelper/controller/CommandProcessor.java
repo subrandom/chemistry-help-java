@@ -6,7 +6,6 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import net.stgtech.chemistryHelper.model.Element;
 import net.stgtech.chemistryHelper.model.Elements;
-import org.nfunk.jep.JEP;
 
 public class CommandProcessor {   
     public static void parseCommandEntry(String commandEntered) {
@@ -227,11 +226,10 @@ public class CommandProcessor {
         if(errorInFormula) {
             return;
         }
-        System.out.println(equation.toString());
         
-        JEP myParser = new JEP();
-        myParser.parseExpression(equation.toString());
-        System.out.println(myParser.getValue());
+        Parser parser = new Parser();
+        double result = parser.parse(equation.toString());
+        ScreenController.showAtomicMassWindow(expression, result);
     }
     
     
@@ -257,7 +255,7 @@ public class CommandProcessor {
     }
     
     private static boolean isOperator(char c) {
-        return c == '^' || c == '+' || c == '*';
+        return c == '^' || c == '+' || c == '*' || c == '-';
     }
     
        
@@ -268,7 +266,7 @@ public class CommandProcessor {
 
             elements.stream().forEach((e) -> {
                 if(Elements.isValidElement(e)) {
-                    elementsToShow.add(Elements.getElementBySymbol(e));
+                    elementsToShow.add(Elements.getElementBySymbolorName(e));
                 }
         });
             

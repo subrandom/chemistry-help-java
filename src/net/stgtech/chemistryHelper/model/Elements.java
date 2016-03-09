@@ -57,7 +57,11 @@ public class Elements {
         return ALL_ELEMENT_NAMES.contains(searchString.toLowerCase()) || ALL_ELEMENT_SYMBOLS.contains(searchString);
     }
     
-    public static Element getElementBySymbol(String symbol) {
+    public static Element getElementBySymbolorName(String symbol) {
+        if(symbol.length() > 2) {
+            return ALL_ELEMENTS.get(ALL_ELEMENT_NAMES.indexOf(symbol.toLowerCase()));
+        }
+        
         return ALL_ELEMENTS.get(ALL_ELEMENT_SYMBOLS.indexOf(symbol));
     }
     
